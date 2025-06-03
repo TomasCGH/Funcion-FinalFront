@@ -1,50 +1,43 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  credenciales = {
-    username: '',
-    contrasena: ''
-  };
+  organizaciones = [
+  {
+    nombre: 'IMMER',
+    imagen: 'assets/immer.png',
+    dominio: '@immer.com'
+  },
+  {
+    nombre: 'INDER',
+    imagen: 'assets/inder.png',
+    dominio: '@inder.gov.co'
+  },
+  {
+    nombre: 'OLIMPO',
+    imagen: 'assets/Olimpo.png',
+    dominio: '@olimpo.org'
+  }
+];
 
-  mensaje = '';
-  cargando = false;
+ 
 
   constructor(private router: Router) {}
 
-  iniciarSesion(form: NgForm) {
-    if (!form.valid) return;
-
-    this.cargando = true;
-
-    // Simulación de petición al backend
-    setTimeout(() => {
-      this.cargando = false;
-
-      if (
-        this.credenciales.username === 'admin' &&
-        this.credenciales.contrasena === '123456'
-      ) {
-        this.mensaje = '✅ Inicio de sesión exitoso.';
-        setTimeout(() => this.router.navigate(['/dashboard']), 1500);
-      } else {
-        this.mensaje = '❌ Credenciales incorrectas.';
-      }
-    }, 1500);
-  }
-  
-  irARegistro() {
-    this.router.navigate(['/registrar']);
+  seleccionarOrg(org: any): void {
+    localStorage.setItem('orgSeleccionada', JSON.stringify(org));
+    this.router.navigate(['/dashboard']); // Cambia la ruta si quieres ir directo a "registrar-encargado"
   }
 
+  irAAdmin(): void {
+    this.router.navigate(['/admin-login']); // Esta es opcional, si tienes login separado para admins
+  }
 }
-

@@ -1,0 +1,102 @@
+<div class="pagina">
+  <!-- 🔝 Navegación -->
+  <div class="nav-buttons">
+    <button type="button" class="secundario" (click)="irAOrganizacion()">
+      Cambiar de Organizacion Deportiva
+    </button>
+  </div>
+
+  <!-- 🧾 Formulario centrado -->
+  <div class="form-container">
+    <h2>Registrar Encargado</h2>
+
+    <form #encargadoForm="ngForm" (ngSubmit)="registrarEncargado(encargadoForm)">
+      
+      <!-- Nombre -->
+      <input type="text" name="nombre" placeholder="Nombre"
+        [(ngModel)]="encargado.nombre" required #nombre="ngModel" />
+      <div *ngIf="encargadoForm.submitted && nombre.invalid" class="error">
+        El nombre es obligatorio.
+      </div>
+
+      <!-- Username -->
+      <input type="text" name="username" placeholder="Username"
+        [(ngModel)]="encargado.username" required #username="ngModel" />
+      <div *ngIf="encargadoForm.submitted && username.invalid" class="error">
+        El username es obligatorio.
+      </div>
+
+      <!-- Contraseña -->
+      <div class="input-group">
+        <input [type]="showPassword ? 'text' : 'password'" name="contrasena"
+          placeholder="Contraseña" [(ngModel)]="encargado.contrasena"
+          required minlength="6" #contrasena="ngModel" />
+        <button type="button" class="eye-btn" (click)="togglePassword()" tabindex="-1" aria-label="Mostrar u ocultar contraseña">
+          <fa-icon [icon]="showPassword ? faEyeSlash : faEye"></fa-icon>
+        </button>
+      </div>
+      <div *ngIf="encargadoForm.submitted && contrasena.invalid" class="error">
+        La contraseña debe tener mínimo 6 caracteres.
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="input-group">
+        <input [type]="showConfirmPassword ? 'text' : 'password'" name="confirmarContrasena"
+          placeholder="Confirmar Contraseña" [(ngModel)]="encargado.confirmarContrasena"
+          required #confirmarContrasena="ngModel" />
+        <button type="button" class="eye-btn" (click)="toggleConfirmPassword()" tabindex="-1" aria-label="Mostrar u ocultar confirmación">
+          <fa-icon [icon]="showConfirmPassword ? faEyeSlash : faEye"></fa-icon>
+        </button>
+      </div>
+      <div *ngIf="encargadoForm.submitted && !contrasenasCoinciden()" class="error">
+        Las contraseñas no coinciden.
+      </div>
+
+      <!-- Tipo Documento -->
+      <select name="tipoDocumento" [(ngModel)]="encargado.tipoDocumento" required #tipoDocumento="ngModel">
+        <option value="" disabled selected>Selecciona tipo de documento</option>
+        <option value="CD">CD</option>
+        <option value="CE">CE</option>
+      </select>
+      <div *ngIf="encargadoForm.submitted && tipoDocumento.invalid" class="error">
+        Selecciona un tipo de documento válido.
+      </div>
+
+      <!-- Número Documento -->
+      <input type="text" name="numeroDocumento" placeholder="Número de Documento"
+        [(ngModel)]="encargado.numeroDocumento" required #numeroDocumento="ngModel" />
+      <div *ngIf="encargadoForm.submitted && numeroDocumento.invalid" class="error">
+        El número de documento es obligatorio.
+      </div>
+
+      <!-- Prefijo Teléfono -->
+      <input type="text" name="prefijoTelefono" placeholder="Prefijo Teléfono (ej: +57)"
+        [(ngModel)]="encargado.prefijoTelefono" required #prefijoTelefono="ngModel" />
+      <div *ngIf="encargadoForm.submitted && prefijoTelefono.invalid" class="error">
+        El prefijo telefónico es obligatorio.
+      </div>
+
+      <!-- Teléfono -->
+      <input type="text" name="telefono" placeholder="Teléfono"
+        [(ngModel)]="encargado.telefono" required #telefono="ngModel" />
+      <div *ngIf="encargadoForm.submitted && telefono.invalid" class="error">
+        El teléfono es obligatorio.
+      </div>
+
+      <!-- Botón de envío -->
+      <button type="submit">Registrar</button>
+    </form>
+
+    <!-- 🔁 Estado y mensajes -->
+    <div *ngIf="cargando" class="mensaje cargando">⏳ Registrando...</div>
+
+    <div *ngIf="mensaje && !cargando"
+         class="mensaje"
+         [ngClass]="{
+           'mensaje-exito': mensajeTipo === 'exito',
+           'mensaje-error': mensajeTipo === 'error'
+         }">
+      {{ mensaje }}
+    </div>
+  </div>
+</div>
