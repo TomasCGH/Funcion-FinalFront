@@ -1,12 +1,12 @@
 <div class="dashboard">
   <aside class="menu-lateral">
-    <!-- 🔥 Logo y nombre de la organización -->
+    <!-- Logo y nombre de la organización (sin cambios) -->
     <div *ngIf="orgSeleccionada">
       <img [src]="orgSeleccionada.imagen" alt="{{ orgSeleccionada.nombre }}" class="logo-org" />
       <div class="nombre-org">{{ orgSeleccionada.nombre }}</div>
     </div>
 
-    <!-- 📁 Menú de navegación -->
+    <!-- Menú lateral (sin cambios) -->
     <h3>Catálogo</h3>
     <ul>
       <li>🏠 Inicio</li>
@@ -21,17 +21,17 @@
     <h2>Bienvenido, Administrador 👋</h2>
 
     <div class="tarjetas">
-      <!-- ✅ Funcional: va a registrar -->
-      <div class="tarjeta">
-        <a routerLink="/registrar">📋 Registrar Encargado</a>
+      <!-- Tarjeta “Registrar Encargado”: igual estilo que el resto -->
+      <div class="tarjeta" routerLink="/registrar">
+        📋 Registrar Encargado
       </div>
 
-      <!-- ❌ Aún no implementado -->
+      <!-- Tarjeta “Registrar Canchas” (sin cambios funcionales) -->
       <div class="tarjeta" (click)="mostrarMensajeNoDisponible()">
         🎾 Registrar Canchas
       </div>
 
-      <!-- ❌ Aún no implementado -->
+      <!-- Tarjeta “Módulo Reservas” (sin cambios funcionales) -->
       <div class="tarjeta" (click)="mostrarMensajeNoDisponible()">
         🕒 Módulo Reservas
       </div>

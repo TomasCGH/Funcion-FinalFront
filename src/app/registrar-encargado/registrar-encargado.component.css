@@ -1,4 +1,4 @@
-/* 🎯 Reset */
+
 *,
 *::before,
 *::after {
@@ -10,7 +10,7 @@ input, select {
   background-color: #f8f8f8;
 }
 
-/* 🎯 Layout base */
+
 .pagina {
   position: relative;
   display: flex;
@@ -33,7 +33,7 @@ input, select {
   z-index: -1;
 }
 
-/* 🔝 Botones navegación */
+
 .nav-buttons {
   position: absolute;
   top: 16px;
@@ -55,7 +55,7 @@ input, select {
   color: #dddddd;
 }
 
-/* 🧾 Formulario */
+
 .form-container {
   position: relative;
   width: 100%;

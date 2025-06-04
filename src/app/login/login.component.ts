@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+// src/app/login/login.component.ts
+
+import { Component, OnInit } from '@angular/core';      // ← Importar OnInit
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -9,35 +11,42 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {         // ← Implementa OnInit
   organizaciones = [
-  {
-    nombre: 'IMMER',
-    imagen: 'assets/immer.png',
-    dominio: '@immer.com'
-  },
-  {
-    nombre: 'INDER',
-    imagen: 'assets/inder.png',
-    dominio: '@inder.gov.co'
-  },
-  {
-    nombre: 'OLIMPO',
-    imagen: 'assets/Olimpo.png',
-    dominio: '@olimpo.org'
-  }
-];
-
- 
+    {
+      nombre: 'IMMER',
+      imagen: 'assets/immer.png',
+      dominio: '@immer.com'
+    },
+    {
+      nombre: 'INDER',
+      imagen: 'assets/inder.png',
+      dominio: '@inder.gov.co'
+    },
+    {
+      nombre: 'OLIMPO',
+      imagen: 'assets/Olimpo.png',
+      dominio: '@olimpo.org'
+    }
+  ];
 
   constructor(private router: Router) {}
 
+  ngOnInit(): void {
+    // Cada vez que se muestre el login, eliminamos cualquier org almacenada
+    localStorage.removeItem('orgSeleccionada');
+  }
+
   seleccionarOrg(org: any): void {
+    // Guardamos la organización elegida en localStorage
     localStorage.setItem('orgSeleccionada', JSON.stringify(org));
-    this.router.navigate(['/dashboard']); // Cambia la ruta si quieres ir directo a "registrar-encargado"
+    // Redirigimos a la pantalla de Dashboard
+    this.router.navigate(['/dashboard']);
   }
 
   irAAdmin(): void {
-    this.router.navigate(['/admin-login']); // Esta es opcional, si tienes login separado para admins
+    // Si tienes una ruta de login para administradores, navega allí;
+    // de lo contrario, puedes eliminar este método o dejarlo vacío.
+    this.router.navigate(['/admin-login']);
   }
 }

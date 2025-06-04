@@ -30,13 +30,13 @@
       <div class="input-group">
         <input [type]="showPassword ? 'text' : 'password'" name="contrasena"
           placeholder="Contraseña" [(ngModel)]="encargado.contrasena"
-          required minlength="6" #contrasena="ngModel" />
+          required minlength="8" #contrasena="ngModel" />
         <button type="button" class="eye-btn" (click)="togglePassword()" tabindex="-1" aria-label="Mostrar u ocultar contraseña">
           <fa-icon [icon]="showPassword ? faEyeSlash : faEye"></fa-icon>
         </button>
       </div>
       <div *ngIf="encargadoForm.submitted && contrasena.invalid" class="error">
-        La contraseña debe tener mínimo 6 caracteres.
+        La contraseña debe tener mínimo 8 caracteres.
       </div>
 
       <!-- Confirmar Contraseña -->
@@ -55,7 +55,7 @@
       <!-- Tipo Documento -->
       <select name="tipoDocumento" [(ngModel)]="encargado.tipoDocumento" required #tipoDocumento="ngModel">
         <option value="" disabled selected>Selecciona tipo de documento</option>
-        <option value="CD">CD</option>
+        <option value="CC">CC</option>
         <option value="CE">CE</option>
       </select>
       <div *ngIf="encargadoForm.submitted && tipoDocumento.invalid" class="error">

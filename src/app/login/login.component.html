@@ -1,10 +1,12 @@
 <div class="pagina">
-  <!-- Botón de administración -->
+  <!-- Cambiamos el botón para que apunte a /registrar directamente -->
   <div class="nav-buttons">
-    <button class="secundario" (click)="irAAdmin()">Administración</button>
+    <button class="secundario" routerLink="/registrar">
+      Registrar encargado
+    </button>
   </div>
 
-  <!-- Contenedor de organizaciones -->
+  <!-- Contenedor de organizaciones (igual que antes) -->
   <div class="organizaciones-container">
     <div
       class="card-org"
