@@ -1,26 +1,33 @@
-// src/app/app.module.ts
-
+// src/app/app.routes.ts
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app.routes';
+import { RouterModule, Routes } from '@angular/router';
+
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RegistrarEncargadoComponent } from './registrar-encargado/registrar-encargado.component';
 import { RegistroGuard } from './guards/registro.guard';
 
+export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [RegistroGuard]
+  },
+
+  {
+    path: 'registrar',
+    component: RegistrarEncargadoComponent,
+    canActivate: [RegistroGuard]
+  },
+
+  { path: '**', redirectTo: 'login' }
+];
+
 @NgModule({
-  declarations: [
-    LoginComponent,
-    DashboardComponent,
-    RegistrarEncargadoComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [
-    RegistroGuard
-  ],
-  bootstrap: [LoginComponent]  // o el componente raíz que estés usando
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppModule { }
+export class AppRoutingModule { }

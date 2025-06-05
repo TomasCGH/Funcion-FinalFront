@@ -1,3 +1,4 @@
+// src/app/guards/registro.guard.ts
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
@@ -7,9 +8,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class RegistroGuard implements CanActivate {
   constructor(private router: Router) {}
 
@@ -17,10 +16,14 @@ export class RegistroGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | UrlTree {
+    console.log('▶️ RegistroGuard: intentando ir a', state.url,
+                'orgSeleccionada =', localStorage.getItem('orgSeleccionada'));
+
     const org = localStorage.getItem('orgSeleccionada');
     if (org) {
-      return true;
+      return true; // hay org, deja pasar
     }
+
     alert('⚠️ Solo una organización deportiva puede registrar un encargado.');
     return this.router.parseUrl('/login');
   }

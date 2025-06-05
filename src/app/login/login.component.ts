@@ -1,6 +1,5 @@
 // src/app/login/login.component.ts
-
-import { Component, OnInit } from '@angular/core';      // ← Importar OnInit
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -11,29 +10,29 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {         // ← Implementa OnInit
+export class LoginComponent implements OnInit {
   organizaciones = [
     {
       nombre: 'IMMER',
       imagen: 'assets/immer.png',
-      dominio: '@immer.com'
+      //dominio: '@immer.com'
     },
     {
       nombre: 'INDER',
       imagen: 'assets/inder.png',
-      dominio: '@inder.gov.co'
+      //dominio: '@inder.gov.co'
     },
     {
       nombre: 'OLIMPO',
       imagen: 'assets/Olimpo.png',
-      dominio: '@olimpo.org'
+      //dominio: '@olimpo.org'
     }
   ];
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // Cada vez que se muestre el login, eliminamos cualquier org almacenada
+   
     localStorage.removeItem('orgSeleccionada');
   }
 
@@ -44,9 +43,9 @@ export class LoginComponent implements OnInit {         // ← Implementa OnInit
     this.router.navigate(['/dashboard']);
   }
 
-  irAAdmin(): void {
-    // Si tienes una ruta de login para administradores, navega allí;
-    // de lo contrario, puedes eliminar este método o dejarlo vacío.
-    this.router.navigate(['/admin-login']);
+  irARegistrar(): void {
+    //  Este método solo será invocado si existe orgSeleccionada;
+    //  en caso contrario, el Guard ya habrá alertado y redirigido al /login.
+    this.router.navigate(['/registrar']);
   }
 }

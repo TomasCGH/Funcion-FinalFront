@@ -1,50 +1,107 @@
+<!-- src/app/registrar-encargado/registrar-encargado.component.html -->
+
 <div class="pagina">
-  <!-- 🔝 Navegación -->
+  <!-- 🔝 Botón para cambiar de organización deportiva -->
   <div class="nav-buttons">
     <button type="button" class="secundario" (click)="irAOrganizacion()">
-      Cambiar de Organizacion Deportiva
+      Cambiar de Organización Deportiva
     </button>
   </div>
 
-  <!-- 🧾 Formulario centrado -->
+  <!-- 🧾 Contenedor del formulario -->
   <div class="form-container">
     <h2>Registrar Encargado</h2>
 
     <form #encargadoForm="ngForm" (ngSubmit)="registrarEncargado(encargadoForm)">
-      
-      <!-- Nombre -->
-      <input type="text" name="nombre" placeholder="Nombre"
-        [(ngModel)]="encargado.nombre" required #nombre="ngModel" />
+
+      <!-- —— NOMBRE —— -->
+      <label for="nombre">Nombre completo</label>
+      <input
+        id="nombre"
+        name="nombre"
+        type="text"
+        [(ngModel)]="encargado.nombre"
+        required
+        minlength="2"
+        maxlength="100"
+        placeholder="Solo letras y espacios"
+        #nombre="ngModel"
+        (keypress)="soloLetrasKeypress($event)"
+        (paste)="soloLetrasPaste($event)"
+      />
       <div *ngIf="encargadoForm.submitted && nombre.invalid" class="error">
-        El nombre es obligatorio.
+        El nombre es obligatorio y sólo puede contener letras y espacios (2–100 caracteres).
       </div>
 
-      <!-- Username -->
-      <input type="text" name="username" placeholder="Username"
-        [(ngModel)]="encargado.username" required #username="ngModel" />
+      <!-- —— USERNAME —— -->
+      <label for="username">Username</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        [(ngModel)]="encargado.username"
+        required
+        minlength="5"
+        maxlength="30"
+        placeholder="Letras, números, . y _"
+        #username="ngModel"
+        (keypress)="validarUsernameKeypress($event)"
+        (paste)="bloquearPasteUsername($event)"
+      />
       <div *ngIf="encargadoForm.submitted && username.invalid" class="error">
-        El username es obligatorio.
+        El username es obligatorio (5–30 caracteres) y solo puede contener letras, números, puntos o guión bajo,
+        sin espacios al inicio/final ni “..”/“__”.
       </div>
 
-      <!-- Contraseña -->
+      <!-- —— CONTRASEÑA —— -->
+      <label for="contrasena">Contraseña</label>
       <div class="input-group">
-        <input [type]="showPassword ? 'text' : 'password'" name="contrasena"
-          placeholder="Contraseña" [(ngModel)]="encargado.contrasena"
-          required minlength="8" #contrasena="ngModel" />
-        <button type="button" class="eye-btn" (click)="togglePassword()" tabindex="-1" aria-label="Mostrar u ocultar contraseña">
+        <input
+          id="contrasena"
+          name="contrasena"
+          [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="encargado.contrasena"
+          required
+          minlength="8"
+          maxlength="24"
+          placeholder="Entre 8 y 24 caracteres (espacios cuentan)"
+          #contrasena="ngModel"
+        />
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="togglePassword()"
+          tabindex="-1"
+          aria-label="Mostrar u ocultar contraseña"
+        >
           <fa-icon [icon]="showPassword ? faEyeSlash : faEye"></fa-icon>
         </button>
       </div>
       <div *ngIf="encargadoForm.submitted && contrasena.invalid" class="error">
-        La contraseña debe tener mínimo 8 caracteres.
+        La contraseña es obligatoria y debe tener entre 8 y 24 caracteres (los espacios cuentan).
       </div>
 
-      <!-- Confirmar Contraseña -->
+      <!-- —— CONFIRMAR CONTRASEÑA —— -->
+      <label for="confirmarContrasena">Confirmar Contraseña</label>
       <div class="input-group">
-        <input [type]="showConfirmPassword ? 'text' : 'password'" name="confirmarContrasena"
-          placeholder="Confirmar Contraseña" [(ngModel)]="encargado.confirmarContrasena"
-          required #confirmarContrasena="ngModel" />
-        <button type="button" class="eye-btn" (click)="toggleConfirmPassword()" tabindex="-1" aria-label="Mostrar u ocultar confirmación">
+        <input
+          id="confirmarContrasena"
+          name="confirmarContrasena"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          [(ngModel)]="encargado.confirmarContrasena"
+          required
+          minlength="8"
+          maxlength="24"
+          placeholder="Repite la contraseña"
+          #confirmarContrasena="ngModel"
+        />
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="toggleConfirmPassword()"
+          tabindex="-1"
+          aria-label="Mostrar u ocultar confirmación"
+        >
           <fa-icon [icon]="showConfirmPassword ? faEyeSlash : faEye"></fa-icon>
         </button>
       </div>
@@ -52,50 +109,97 @@
         Las contraseñas no coinciden.
       </div>
 
-      <!-- Tipo Documento -->
-      <select name="tipoDocumento" [(ngModel)]="encargado.tipoDocumento" required #tipoDocumento="ngModel">
+      <!-- —— TIPO DE DOCUMENTO —— -->
+      <label for="tipoDocumento">Tipo de Documento</label>
+      <select
+        id="tipoDocumento"
+        name="tipoDocumento"
+        [(ngModel)]="encargado.tipoDocumento"
+        required
+        #tipoDocumento="ngModel"
+      >
         <option value="" disabled selected>Selecciona tipo de documento</option>
         <option value="CC">CC</option>
         <option value="CE">CE</option>
       </select>
       <div *ngIf="encargadoForm.submitted && tipoDocumento.invalid" class="error">
-        Selecciona un tipo de documento válido.
+        Selecciona “CC” o “CE”.
       </div>
 
-      <!-- Número Documento -->
-      <input type="text" name="numeroDocumento" placeholder="Número de Documento"
-        [(ngModel)]="encargado.numeroDocumento" required #numeroDocumento="ngModel" />
+      <!-- —— NÚMERO DE DOCUMENTO —— -->
+      <label for="numeroDocumento">Número de Documento</label>
+      <input
+        id="numeroDocumento"
+        name="numeroDocumento"
+        type="text"
+        [(ngModel)]="encargado.numeroDocumento"
+        required
+        minlength="6"
+        maxlength="10"
+        placeholder="Solo dígitos, sin espacios"
+        #numeroDocumento="ngModel"
+        (keypress)="soloNumerosKeypress($event)"
+        (paste)="soloNumerosPaste($event)"
+      />
       <div *ngIf="encargadoForm.submitted && numeroDocumento.invalid" class="error">
-        El número de documento es obligatorio.
+        El número de documento es obligatorio y debe tener entre 6 y 10 dígitos.
       </div>
 
-      <!-- Prefijo Teléfono -->
-      <input type="text" name="prefijoTelefono" placeholder="Prefijo Teléfono (ej: +57)"
-        [(ngModel)]="encargado.prefijoTelefono" required #prefijoTelefono="ngModel" />
+      <!-- —— PREFIJO TELÉFONO —— -->
+      <label for="prefijoTelefono">Prefijo Telefónico</label>
+      <input
+        id="prefijoTelefono"
+        name="prefijoTelefono"
+        type="text"
+        [(ngModel)]="encargado.prefijoTelefono"
+        required
+        minlength="2"
+        maxlength="5"
+        placeholder="+57"
+        #prefijoTelefono="ngModel"
+        (keypress)="validarPrefijoKeypress($event)"
+        (paste)="bloquearPastePrefijo($event)"
+      />
       <div *ngIf="encargadoForm.submitted && prefijoTelefono.invalid" class="error">
-        El prefijo telefónico es obligatorio.
+        El prefijo es obligatorio y solo acepta “+57”.
       </div>
 
-      <!-- Teléfono -->
-      <input type="text" name="telefono" placeholder="Teléfono"
-        [(ngModel)]="encargado.telefono" required #telefono="ngModel" />
+      <!-- —— TELÉFONO —— -->
+      <label for="telefono">Teléfono</label>
+      <input
+        id="telefono"
+        name="telefono"
+        type="text"
+        [(ngModel)]="encargado.telefono"
+        required
+        minlength="10"
+        maxlength="10"
+        placeholder="10 dígitos, empieza con 3"
+        #telefono="ngModel"
+        (keypress)="validarTelefonoKeypress($event)"
+        (paste)="bloquearPasteTelefono($event)"
+      />
       <div *ngIf="encargadoForm.submitted && telefono.invalid" class="error">
-        El teléfono es obligatorio.
+        El teléfono es obligatorio, debe tener 10 dígitos y empezar con 3.
       </div>
 
-      <!-- Botón de envío -->
-      <button type="submit">Registrar</button>
+      <!-- —— BOTÓN DE ENVÍO —— -->
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Registrando...' : 'Registrar' }}
+      </button>
     </form>
 
     <!-- 🔁 Estado y mensajes -->
     <div *ngIf="cargando" class="mensaje cargando">⏳ Registrando...</div>
 
-    <div *ngIf="mensaje && !cargando"
-         class="mensaje"
-         [ngClass]="{
-           'mensaje-exito': mensajeTipo === 'exito',
-           'mensaje-error': mensajeTipo === 'error'
-         }">
+    <div
+      *ngIf="mensaje && !cargando"
+      class="mensaje"
+      [ngClass]="{
+        'mensaje-exito': mensajeTipo === 'exito',
+        'mensaje-error': mensajeTipo === 'error'
+      }"
+    >
       {{ mensaje }}
     </div>
   </div>
