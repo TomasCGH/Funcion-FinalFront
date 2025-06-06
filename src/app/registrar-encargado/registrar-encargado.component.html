@@ -126,6 +126,23 @@
         Selecciona “CC” o “CE”.
       </div>
 
+      <!-- —— Cuando sea CE, mostrar checkbox de “Mayor de edad” —— -->
+      <div *ngIf="encargado.tipoDocumento === 'CE'" class="checkbox-container">
+      <input
+      type="checkbox"
+      id="mayorEdad"
+      name="mayorEdad"
+      [(ngModel)]="encargado.mayorEdad"
+      class="checkbox-pequeno"
+      />
+      <label for="mayorEdad" class="label-pequena">
+      El encargado es mayor de edad
+      </label>
+      <div *ngIf="encargadoForm.submitted && !encargado.mayorEdad" class="error">
+       Debes confirmar que el encargado es mayor de edad.
+      </div>
+      </div>
+
       <!-- —— NÚMERO DE DOCUMENTO —— -->
       <label for="numeroDocumento">Número de Documento</label>
       <input
@@ -142,7 +159,7 @@
         (paste)="soloNumerosPaste($event)"
       />
       <div *ngIf="encargadoForm.submitted && numeroDocumento.invalid" class="error">
-        El número de documento es obligatorio y debe tener entre 6 y 10 dígitos.
+        El número de documento es obligatorio y debe tener entre 6 y 10 dígitos (6 a 8 si es CE).
       </div>
 
       <!-- —— PREFIJO TELÉFONO —— -->

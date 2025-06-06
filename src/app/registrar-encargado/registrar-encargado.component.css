@@ -125,6 +125,53 @@ button:hover:enabled {
 .eye-btn:focus {
   outline: none;
 }
+.checkbox-container {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Hacer el checkbox muy pequeño (12×12 px) */
+.checkbox-pequeno {
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  /* Deshabilitamos el estilo por defecto para personalizarlo */
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid #555;
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+.checkbox-pequeno:checked {
+  background-color: #0d00ff; /* Color de fondo cuando esté marcado */
+}
+.checkbox-pequeno:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg); /* Dibuja la palomita */
+}
+
+/* Label a la derecha del checkbox, con fuente pequeña */
+.label-pequena {
+  font-size: 0.9rem;
+  user-select: none;
+  color: #333;
+}
+
+/* Si el checkbox no está marcado al enviar, mostramos un error debajo */
+.error {
+  color: red;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
 
 .eye-btn fa-icon {
   font-size: 1.2rem;

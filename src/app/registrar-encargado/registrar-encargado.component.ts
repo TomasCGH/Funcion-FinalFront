@@ -29,7 +29,8 @@ export class RegistrarEncargadoComponent implements OnInit {
     prefijoTelefono: '',
     telefono: '',
     tipoDocumento: '',
-    numeroDocumento: ''
+    numeroDocumento: '',
+    mayorEdad: false      // <— agregado para el checkbox cuando es CE
   };
 
   organizacionNombre: string = '';
@@ -72,6 +73,13 @@ export class RegistrarEncargadoComponent implements OnInit {
   registrarEncargado(formulario: NgForm): void {
     this.mensaje = '';
     this.mensajeTipo = '';
+
+    // Si tipoDocumento es "CE", verificar que mayorEdad esté true
+    if (this.encargado.tipoDocumento === 'CE' && !this.encargado.mayorEdad) {
+      this.mensaje = '❌ Debes confirmar que el encargado es mayor de edad.';
+      this.mensajeTipo = 'error';
+      return;
+    }
 
     if (!this.contrasenasCoinciden()) {
       this.mensaje = '❌ Las contraseñas no coinciden.';
@@ -169,7 +177,7 @@ export class RegistrarEncargadoComponent implements OnInit {
     }
 
     // 4) Si el usuario está tratando de terminar con “.” o “_”, lo permitimos tipear
-    //    pero luego al enviar el formulario se validará. (Aquí no bloqueamos ese caso)
+    //    pero luego al enviar el formulario se validará.
   }
   bloquearPasteUsername(event: ClipboardEvent) {
     const text = event.clipboardData?.getData('text') || '';
@@ -211,64 +219,64 @@ export class RegistrarEncargadoComponent implements OnInit {
 
   /**
    * Prefijo: debe ser exactamente “+57”.
-   *   - Primera pulsación: sólo “+”
-   *   - Segunda: sólo “5”
-   *   - Tercera: sólo “7”
+   *   - Primera pulsación: solo “+”
+   *   - Segunda: solo “5”
+   *   - Tercera: solo “7”
    *   - No permitir longitud > 3
-   *   - Si el contenido actual NO coincide con el inicio de "+57",
-   *     solo permitimos reiniciar con “+”.
+   *   - Si el contenido actual deja de coincidir con un prefijo parcial válido,
+   *     se limpia el campo y se vuelve a exigir la secuencia desde cero.
    */
   validarPrefijoKeypress(event: KeyboardEvent) {
     const char = event.key;
-    const current: string = this.encargado.prefijoTelefono;
-    const newValue = current + char;
+    let current: string = this.encargado.prefijoTelefono;
+    const targetPrefix = '+57';
 
-    // Si newValue no coincide con ningún prefijo de "+57", solo permitimos "+" para reiniciar:
-    if (!"+57".startsWith(newValue)) {
-      if (char === "+") {
-        // aceptamos "+" y el usuario reiniciará el valor
-        return;
+    // 1) Si el valor actual no coincide con el inicio de "+57", limpiamos todo:
+    if (!targetPrefix.startsWith(current)) {
+      // Esto cubre casos como "57", "+7", "+5+" o "5" sueltos.
+      this.encargado.prefijoTelefono = '';
+      current = '';
+    }
+
+    // A partir de aquí, "current" es "" o un prefijo parcial válido ("+", "+5").
+    if (current.length === 0) {
+      // Solo permito "+" en primera posición
+      if (char !== '+') {
+        event.preventDefault();
       }
-      event.preventDefault();
       return;
     }
 
-    // Si newValue sí coincide con inicio de "+57", entonces forzamos la secuencia:
-    switch (current.length) {
-      case 0:
-        // "" → solo permitimos "+"
-        if (char !== "+") {
-          event.preventDefault();
-        }
-        return;
-      case 1:
-        // "+" → solo permitimos "5"
-        if (char !== "5") {
-          event.preventDefault();
-        }
-        return;
-      case 2:
-        // "+5" → solo permitimos "7"
-        if (char !== "7") {
-          event.preventDefault();
-        }
-        return;
-      default:
-        // Ya tiene "+57" completo (longitud 3). No permitimos más.
+    if (current.length === 1) {
+      // Es "+". Ahora solo permito "5"
+      if (char !== '5') {
         event.preventDefault();
-        return;
+      }
+      return;
     }
+
+    if (current.length === 2) {
+      // Es "+5". Ahora solo permito "7"
+      if (char !== '7') {
+        event.preventDefault();
+      }
+      return;
+    }
+
+    // Si ya tenía "+57" completo, no permito nada más:
+    event.preventDefault();
   }
+
   bloquearPastePrefijo(event: ClipboardEvent) {
     const text = event.clipboardData?.getData("text") || "";
-    // Solo aceptamos exactamente "+57"
+    // Solo acepto paste EXACTO de "+57"
     if (text !== "+57") {
       event.preventDefault();
     }
   }
 
   /**
-   * Teléfono: 
+   * Teléfono:
    * - Solo dígitos,
    * - Longitud máxima 10,
    * - Primer dígito “3”.
